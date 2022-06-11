@@ -15,8 +15,23 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 public class ResponseControllerTests {
 
+	// perform :
+	// 가상의 요청을 처리한다.
+	// return값으로 ResultActions 객체를 받으며,
+	// 이 객체는 리턴 값을 검증하고 확인할 수 있는 andExpect()를 제공한다.
+
+	//	andExpect : 응답을 검증하는 역할을 한다.
+	//	상태 코드 검증 ( status() )
+	//	응답 본문 내용 검증 ( content() )
+	//	스프링 MVC 모델 상태 검증 ( model() )
+
+	//	andDo
+	//	전체 결과 출력 ( print() )
+
 	private MockMvc mockMvc;
 
+	// 테스트에 사용할 파라미터의 세팅을 반드시 해줘야한다.
+	// 테스트할 컨트롤러의 MockMvc객체 생성
 	@BeforeEach
 	public void setup() {
 		this.mockMvc = standaloneSetup(new ResponseController()).build();
