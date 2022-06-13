@@ -45,6 +45,7 @@ public class ResponseControllerTests {
 				.andExpect(content().string("The String ResponseBody"));
 	}
 
+	// 요청받은 값에 맞게 미디어타입을 수정하여 응답한다.
 	@Test
 	public void responseCharsetAccept() throws Exception {
 		this.mockMvc.perform(
@@ -70,8 +71,17 @@ public class ResponseControllerTests {
 		this.mockMvc.perform(get("/response/entity/status"))
 				.andExpect(status().isForbidden())
 				.andDo(print())
-				.andExpect(content().string(
+				.andExpect(content().string( // 예상한 결과을 적는다. 예상 값과 다를 경우 오류가 나온다.
 						"The String ResponseBody with custom status code (403 Forbidden)"));
+	}
+
+	@Test
+	public void responseEntityStatus1() throws Exception {
+		this.mockMvc.perform(get("/response/entity/status1"))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(content().string(
+						"The server has processed the request."));
 	}
 
 	@Test
@@ -81,6 +91,15 @@ public class ResponseControllerTests {
 				.andDo(print())
 				.andExpect(content().string(
 						"The String ResponseBody with custom header Content-Type=text/plain"));
+	}
+
+	@Test
+	public void responseEntityHeaders1() throws Exception {
+		this.mockMvc.perform(get("/response/entity/headers1"))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(content().string(
+						"The String ResponseBody with custom header Content-Type=text/xml"));
 	}
 
 }

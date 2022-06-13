@@ -27,6 +27,8 @@ public class MessageConvertersController {
 
 	// Form encoded data (application/x-www-form-urlencoded)
 
+	// @ModelAttribute
+	// 사용자가 요청시 전달한 값을 오브젝트 형태로 매핑해주는 어노테이션이다.
 	@PostMapping("/form")
 	public String readForm(@ModelAttribute JavaBean bean) {
 		return "Read x-www-form-urlencoded: " + bean;
@@ -35,24 +37,26 @@ public class MessageConvertersController {
 	@GetMapping("/form")
 	public MultiValueMap<String, String> writeForm() {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("foo", "bar");
+		map.add("foo", "bar"); // bar와 apple 추가
 		map.add("fruit", "apple");
 		return map;
 	}
 
-	// Jaxb2RootElementHttpMessageConverter (requires JAXB2 on the classpath - useful for serving clients that expect to work with XML)
+	// Jaxb2RootElementHttpMessageConverter
+	// (requires JAXB2 on the classpath - useful for serving clients that expect to work with XML)
 
 	@PostMapping("/xml")
 	public String readXml(@RequestBody JavaBean bean) {
 		return "Read from XML: " + bean;
-	}
+	} // 빈을 읽음
 
 	@GetMapping("/xml")
 	public JavaBean writeXml() {
 		return new JavaBean("bar", "apple");
 	}
 
-	// MappingJacksonHttpMessageConverter (requires Jackson on the classpath - particularly useful for serving JavaScript clients that expect to work with JSON)
+	// MappingJacksonHttpMessageConverter
+	// (requires Jackson on the classpath - particularly useful for serving JavaScript clients that expect to work with JSON)
 
 	@PostMapping("/json")
 	public String readJson(@Valid @RequestBody JavaBean bean, BindingResult result) {
