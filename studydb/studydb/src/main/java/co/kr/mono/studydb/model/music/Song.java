@@ -10,16 +10,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Song {
+
     private String albumId;
     private String songName ;
     private Float playTime ;
-    //private Album album;
+
+
+    // 노래 중심으로 앨범과 뮤지션 정보 가져오기
+    private Album album;
+    private Artist artist;
+
 
     @Override
     public String toString() {
-
-        return "Song [albumId=" + albumId + ",songName=" + songName + ", playTime=" + playTime
-                + "]";
-
+        return "Song{" +
+                "albumId='" + albumId + '\'' +
+                ", songName='" + songName + '\'' +
+                ", playTime=" + playTime +
+                ", artist=" + artist +
+                ", album=" + album +
+                '}';
     }
 }

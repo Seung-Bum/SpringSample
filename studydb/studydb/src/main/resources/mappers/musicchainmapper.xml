@@ -3,25 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.kr.mono.studydb.dao.MusicChainDao">
+
     <resultMap id="songResultMap" type="co.kr.mono.studydb.model.music.Song">
         <id column="album_id" property="albumId" jdbcType="VARCHAR" />
         <id column="song_name" property="songName" jdbcType="VARCHAR" />
         <result column="play_time" property="playTime" jdbcType="BIGINT" />
+
         <!-- 실행시 albumResultMap의 collection을 주석으로 막고 실행해야함 cycle생김 -->
-        <!-- <association column="album_id" property="album" select="selectAlbumByPrimaryKey" />-->
-        <!--<association column="mst_id" property="artist" select="selectAlbumByPrimaryKey" />-->
+<!--        <association column="mst_id" property="artist" select="selectArtistByPrimaryKey" />-->
+
+        <!-- 노래 중심으로 앨범과 뮤지션 정보 가져오기 -->
+        <association column="album_id" property="album" select="selectAlbumByPrimaryKey" />
+
+
     </resultMap>
 
     <resultMap id="artistResultMap" type="co.kr.mono.studydb.model.music.Artist">
         <id column="mst_id" property="mstId" jdbcType="VARCHAR" />
         <result column="mst_name" property="mstName" jdbcType="VARCHAR" />
         <result column="debut_date" property="debutDate" jdbcType="VARCHAR" />
+
+        <!-- 아티스트에서 앨범과 노래정보들을 가져올때 필요함
         <collection column="mst_id" property="album"
                     javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Album"
                     select="selectAlbumByPrimaryKey" />
         <collection column="album_id" property="songs"
                     javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Song"
-                    select="selectSongByAlbumKey" />
+                    select="selectSongByAlbumKey" /> -->
     </resultMap>
 
     <resultMap id="albumResultMap" 	type="co.kr.mono.studydb.model.music.Album">
@@ -29,10 +37,14 @@
         <result column="album_seq" property="albumSeq"	jdbcType="INTEGER" />
         <result column="album_title" property="albumTitle"	jdbcType="VARCHAR" />
         <result column="open_date" property="openDate"	jdbcType="VARCHAR" />
-        <!-- <association column="mst_id" property="artist" 	select="selectArtistByPrimaryKey" />-->
+
+        <!-- 노래 중심으로 앨범과 뮤지션 정보 가져오기 -->
+        <association column="mst_id" property="artist" select="selectArtistByPrimaryKey" />
+
+        <!-- 아티스트에서 앨범과 노래정보들을 가져올때 필요함 (앨범에서 노래 정보를 가져올때)
         <collection column="album_id" property="songs"
                     javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Song"
-                    select="selectSongByAlbumKey" />
+                    select="selectSongByAlbumKey" /> -->
     </resultMap>
 
 
@@ -43,29 +55,29 @@
 
     <select id="selectSongByAlbumKey" resultMap="songResultMap"	parameterType="java.lang.String">
         SELECT ALBUM_ID
-        ,SONG_NAME
-        ,PLAY_TIME
+            ,SONG_NAME
+            ,PLAY_TIME
         FROM SONG
         WHERE ALBUM_ID =#{album_id,jdbcType=VARCHAR}
     </select>
 
     <select id="selectArtistByPrimaryKey" resultMap="artistResultMap" parameterType="java.lang.String">
         SELECT MST_ID
-        ,MST_NAME
-        ,DEBUT_DATE
+            ,MST_NAME
+            ,DEBUT_DATE
         FROM ARTIST
         WHERE MST_ID =#{mst_id,jdbcType=VARCHAR}
     </select>
 
     <select id="selectAlbumByPrimaryKey" resultMap="albumResultMap"	parameterType="java.lang.String">
         SELECT ALBUM_ID
-        ,MST_ID
-        ,ALBUM_SEQ
-        ,ALBUM_TITLE
-        ,OPEN_DATE
+            ,MST_ID
+            ,ALBUM_SEQ
+            ,ALBUM_TITLE
+            ,OPEN_DATE
         FROM ALBUM
-        WHERE MST_ID =#{album_id,jdbcType=VARCHAR}
-        <!--WHERE ALBUM_ID =#{album_id,jdbcType=VARCHAR}-->
+<!--        WHERE MST_ID =#{album_id,jdbcType=VARCHAR} ??? 왜 있는지 모르겠음 오타 같음 -->
+        WHERE ALBUM_ID =#{album_id,jdbcType=VARCHAR}
     </select>
 
 </mapper>
