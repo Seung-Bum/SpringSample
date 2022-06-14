@@ -24,7 +24,7 @@ public class Album {
 
 
     // 앨범을 통해 노래의 정보들을 가져올때 해당 필드가 필요함
-//    private  List<Song> songs ;  // album_id
+    private  List<Song> songs ;  // album_id
 
 
     @Override
@@ -35,6 +35,7 @@ public class Album {
                 ", albumTitle='" + albumTitle + '\'' +
                 ", openDate='" + openDate + '\'' +
                 ", artist=" + artist +
+                ", songs=" + songs +
                 '}';
     }
 }
