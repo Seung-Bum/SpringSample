@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.mono.studydb.dao.NudleChainDao">
+
+    <resultMap id="nudleOrderResultMap" type="co.kr.mono.studydb.model.nudle.NudleOrder">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <id column="member_id" property="memberId" jdbcType="VARCHAR" />
+        <result column="order_date" property="orderDate" jdbcType="VARCHAR" />
+        <result column="total_price" property="totalPrice" jdbcType="VARCHAR" />
+
+        <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
+
+        <!-- collection을 제일 밑에 놔야함
+        error : The content of element type "resultMap" must match
+        "(constructor?,id*,result*,association*,collection*,discriminator?)".-->
+        <collection column="order_id" property="orderProduct"
+                    javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.nudle.OrderProduct">
+            <id column="order_product_id" property="orderProductId" jdbcType="VARCHAR" />
+            <id column="product_id" property="productId" jdbcType="VARCHAR" />
+            <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+            <result column="location" property="location" jdbcType="VARCHAR" />
+        </collection>
+
+    </resultMap>
+
+    <resultMap id="orderProductResultMap" type="co.kr.mono.studydb.model.nudle.OrderProduct">
+        <id column="order_product_id" property="orderProductId" jdbcType="VARCHAR" />
+        <id column="product_id" property="productId" jdbcType="VARCHAR" />
+        <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
+
+        <association column="product_id" property="nudle" javaType="co.kr.mono.studydb.model.nudle.Nudle">
+            <id column="product_id" property="productId" jdbcType="VARCHAR" />
+            <result column="product_category" property="productCategory" jdbcType="VARCHAR"/>
+            <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+            <result column="product_price" property="productPrice" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="NudleResultMap" type="co.kr.mono.studydb.model.nudle.Nudle">
+        <id column="product_id" property="productId" jdbcType="VARCHAR" />
+        <result column="product_category" property="productCategory" jdbcType="VARCHAR" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="product_price" property="productPrice" jdbcType="VARCHAR" />
+        <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
+    </resultMap>
+
+
+    <!-- nudleOrder -->
+    <!-- 파라미터 타입을 INTEGER로 변경함 COLUMN 타입이 거의다 NUMBER임 ORDER_DATE만 TIMESTEMP -->
+    <select id="selectOrderByPrimaryKey" resultMap="nudleOrderResultMap" parameterType="java.lang.Integer">
+        SELECT
+             ORDER_ID
+            ,MEMBER_ID
+            ,ORDER_DATE
+            ,TOTAL_PRICE
+        FROM
+        NUDLE_ORDER
+        WHERE ORDER_ID = #{order_id,jdbcType=VARCHAR}
+    </select>
+
+    <!-- orderProduct -->
+    <select id="selectOrderByPrimaryKey1" resultMap="orderProductResultMap" parameterType="java.lang.Integer">
+        SELECT
+             ORDER_PRODUCT_ID
+            ,PRODUCT_ID
+            ,ORDER_ID
+            ,LOCATION
+        FROM
+        ORDER_PRODUCT
+        WHERE ORDER_ID = #{order_id,jdbcType=VARCHAR}
+        <!-- 원래 order_product_id로 해야하지만 조인 역할을 하기위해 order_id로 변경 -->
+    </select>
+
+    <!-- Nudle -->
+    <select id="selectOrderByPrimaryKey2" resultMap="NudleResultMap" parameterType="java.lang.Integer">
+        SELECT
+            PRODUCT_ID
+            ,PRODUCT_CATEGORY
+            ,PRODUCT_NAME
+            ,PRODUCT_PRICE
+        FROM
+        NUDLE
+        WHERE PRODUCT_ID = #{product_id, jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!-- 조인방식
+    <select id="selectOrderByPrimaryKey1" resultMap="nudleOrderResultMap" parameterType="java.lang.Integer">
+        SELECT A.ORDER_ID
+            ,A.MEMBER_ID
+            ,A.ORDER_DATE
+            ,A.TOTAL_PRICE
+            ,B.ORDER_PRODUCT_ID
+            ,B.PRODUCT_ID
+            ,B.LOCATION
+        FROM
+        NUDLE_ORDER A, ORDER_PRODUCT B
+        WHERE A.ORDER_ID = B.ORDER_ID
+        AND A.ORDER_ID = #{order_id,jdbcType=VARCHAR}
+    </select> -->
+
+</mapper>
