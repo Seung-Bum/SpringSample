@@ -15,21 +15,20 @@ public class NudleChainService {
     @Autowired
     NudleChainDao nudleChainDao;
 
-    public List<NudleOrder> searchNudleOrder(int order_id) {
-        List<NudleOrder> nudleOrderList = nudleChainDao.selectOrderByPrimaryKey(order_id);
+    public NudleOrder searchNudleOrder(int order_id) {
+        NudleOrder nudleOrderList = nudleChainDao.selectOrderByPrimaryKey(order_id);
         System.out.println(nudleOrderList);
         return nudleOrderList;
     }
 
-    public List<OrderProduct> searchOrderProduct(int order_id) {
-        List<OrderProduct> OrderProductList = nudleChainDao.selectOrderByPrimaryKey1(order_id);
+    public List<OrderProduct> searchOrderProduct() {
+        List<OrderProduct> OrderProductList = nudleChainDao.selectOrderByPrimaryKey1();
         System.out.println(OrderProductList);
         return OrderProductList;
     }
 
-
-    public List<Nudle> searchNudle(int product_id) {
-        List<Nudle> nudle = nudleChainDao.selectOrderByPrimaryKey2(product_id);
+    public Nudle searchNudle() {
+        Nudle nudle = nudleChainDao.selectOrderByPrimaryKey2();
         System.out.println(nudle);
         return nudle;
     }

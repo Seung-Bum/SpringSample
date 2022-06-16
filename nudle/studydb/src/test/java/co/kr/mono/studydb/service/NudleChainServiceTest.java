@@ -33,21 +33,21 @@ class NudleChainServiceTest {
     @Test
     @DisplayName("국수 판매현황 + 알파")
     public void nudleOrderList() throws JsonProcessingException {
-        List<NudleOrder> nudleOrderList = nudleChainService.searchNudleOrder(1);
+        NudleOrder nudleOrderList = nudleChainService.searchNudleOrder(1);
         log.info("Json 변환 : {} ",mapper.writeValueAsString(nudleOrderList));
     }
 
     @Test
     @DisplayName("상세 현황 + 알파")
     public void nudleOrderList1() throws JsonProcessingException {
-        List<OrderProduct> OrderProductList = nudleChainService.searchOrderProduct(1);
+        List<OrderProduct> OrderProductList = nudleChainService.searchOrderProduct();
         log.info("Json 변환 : {} ",mapper.writeValueAsString(OrderProductList));
     }
 
     @Test
     @DisplayName("제품 + 알파")
     public void nudleOrderList2() throws JsonProcessingException {
-        List<Nudle> nudle = nudleChainService.searchNudle(1);
+        Nudle nudle = nudleChainService.searchNudle();
         log.info("Json 변환 : {} ",mapper.writeValueAsString(nudle));
     }
 

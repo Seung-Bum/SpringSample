@@ -5,46 +5,34 @@
 <mapper namespace="co.kr.mono.studydb.dao.NudleChainDao">
 
     <resultMap id="nudleOrderResultMap" type="co.kr.mono.studydb.model.nudle.NudleOrder">
-        <id column="order_id" property="orderId" jdbcType="VARCHAR" />
-        <id column="member_id" property="memberId" jdbcType="VARCHAR" />
+        <id column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="member_id" property="memberId" jdbcType="INTEGER" />
         <result column="order_date" property="orderDate" jdbcType="VARCHAR" />
-        <result column="total_price" property="totalPrice" jdbcType="VARCHAR" />
+        <result column="total_price" property="totalPrice" jdbcType="INTEGER" />
 
         <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
-
-        <!-- collection을 제일 밑에 놔야함
-        error : The content of element type "resultMap" must match
-        "(constructor?,id*,result*,association*,collection*,discriminator?)".-->
         <collection column="order_id" property="orderProduct"
-                    javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.nudle.OrderProduct">
-            <id column="order_product_id" property="orderProductId" jdbcType="VARCHAR" />
-            <id column="product_id" property="productId" jdbcType="VARCHAR" />
-            <id column="order_id" property="orderId" jdbcType="VARCHAR" />
-            <result column="location" property="location" jdbcType="VARCHAR" />
-        </collection>
-
+                    javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.nudle.OrderProduct"
+                    select="selectOrderByPrimaryKey1" />
     </resultMap>
 
+
     <resultMap id="orderProductResultMap" type="co.kr.mono.studydb.model.nudle.OrderProduct">
-        <id column="order_product_id" property="orderProductId" jdbcType="VARCHAR" />
-        <id column="product_id" property="productId" jdbcType="VARCHAR" />
-        <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <id column="order_product_id" property="orderProductId" jdbcType="INTEGER" />
+        <result column="product_id" property="productId" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="location" property="location" jdbcType="VARCHAR" />
         <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
 
-        <association column="product_id" property="nudle" javaType="co.kr.mono.studydb.model.nudle.Nudle">
-            <id column="product_id" property="productId" jdbcType="VARCHAR" />
-            <result column="product_category" property="productCategory" jdbcType="VARCHAR"/>
-            <result column="product_name" property="productName" jdbcType="VARCHAR"/>
-            <result column="product_price" property="productPrice" jdbcType="VARCHAR"/>
-        </association>
+        <association column="product_id" property="nudle" select="selectOrderByPrimaryKey2" />
     </resultMap>
 
+
     <resultMap id="NudleResultMap" type="co.kr.mono.studydb.model.nudle.Nudle">
-        <id column="product_id" property="productId" jdbcType="VARCHAR" />
+        <id column="product_id" property="productId" jdbcType="INTEGER" />
         <result column="product_category" property="productCategory" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
-        <result column="product_price" property="productPrice" jdbcType="VARCHAR" />
+        <result column="product_price" property="productPrice" jdbcType="INTEGER" />
         <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
     </resultMap>
 
@@ -57,9 +45,8 @@
             ,MEMBER_ID
             ,ORDER_DATE
             ,TOTAL_PRICE
-        FROM
-        NUDLE_ORDER
-        WHERE ORDER_ID = #{order_id,jdbcType=VARCHAR}
+        FROM NUDLE_ORDER
+        WHERE ORDER_ID =#{order_id,jdbcType=VARCHAR}
     </select>
 
     <!-- orderProduct -->
@@ -69,22 +56,18 @@
             ,PRODUCT_ID
             ,ORDER_ID
             ,LOCATION
-        FROM
-        ORDER_PRODUCT
+        FROM ORDER_PRODUCT
         WHERE ORDER_ID = #{order_id,jdbcType=VARCHAR}
-        <!-- 원래 order_product_id로 해야하지만 조인 역할을 하기위해 order_id로 변경 -->
     </select>
 
     <!-- Nudle -->
-    <select id="selectOrderByPrimaryKey2" resultMap="NudleResultMap" parameterType="java.lang.Integer">
+    <select id="selectOrderByPrimaryKey2" resultMap="NudleResultMap">
         SELECT
-            PRODUCT_ID
+             PRODUCT_ID
             ,PRODUCT_CATEGORY
             ,PRODUCT_NAME
             ,PRODUCT_PRICE
-        FROM
-        NUDLE
-        WHERE PRODUCT_ID = #{product_id, jdbcType=VARCHAR}
+        FROM NUDLE
     </select>
 
 

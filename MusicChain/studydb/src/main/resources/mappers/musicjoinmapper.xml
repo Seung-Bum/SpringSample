@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.mono.studydb.dao.MusicJoinDao">
+
+    <resultMap id="selectArtistAlbumMap" type="co.kr.mono.studydb.model.music.Album" >
+        <id column="album_Id" property="albumId" jdbcType="VARCHAR"/>
+        <result column="album_seq" property="albumSeq" jdbcType="INTEGER"/>
+        <result column="album_title" property="albumTitle" jdbcType="VARCHAR"/>
+        <result column="open_date" property="openDate" jdbcType="VARCHAR"/>
+        <association column="mst_id" property="artist" javaType="co.kr.mono.studydb.model.music.Artist" >
+            <id column="mst_id" property="mstId" jdbcType="VARCHAR"/>
+            <result column="mst_name" property="mstName" jdbcType="VARCHAR"/>
+            <result column="debut_date" property="debutDate" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="selectArtistByPrimaryKey1" resultMap="selectArtistAlbumMap" parameterType="java.lang.String">
+        SELECT A.MST_ID        MST_ID
+               ,A.MST_NAME     MST_NAME
+               ,A.DEBUT_DATE   DEBUT_DATE
+               ,B.ALBUM_ID     ALBUM_ID
+               ,B.ALBUM_SEQ    ALBUM_SEQ
+               ,B.ALBUM_TITLE  ALBUM_TITLE
+               ,B.OPEN_DATE    OPEN_DATE
+        FROM ARTIST A,ALBUM B
+        WHERE A.MST_ID = B.MST_ID
+        AND B.MST_ID =#{mst_id,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="selectArtistPkAlbumMap" type="co.kr.mono.studydb.model.music.Artist" >
+        <id column="mst_id" property="mstId" jdbcType="VARCHAR"/>
+        <result column="mst_name" property="mstName" jdbcType="VARCHAR"/>
+        <result column="debut_date" property="debutDate" jdbcType="VARCHAR"/>
+        <collection column="mst_id" property="album" javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Album" >
+            <id column="album_Id" property="albumId" jdbcType="VARCHAR"/>
+            <result column="album_seq" property="albumSeq" jdbcType="INTEGER"/>
+            <result column="album_title" property="albumTitle" jdbcType="VARCHAR"/>
+            <result column="open_date" property="openDate" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectArtistByPrimaryKey2" resultMap="selectArtistPkAlbumMap" parameterType="java.lang.String">
+        SELECT A.MST_ID        MST_ID
+               ,A.MST_NAME     MST_NAME
+               ,A.DEBUT_DATE   DEBUT_DATE
+               ,B.ALBUM_ID     ALBUM_ID
+               ,B.ALBUM_SEQ    ALBUM_SEQ
+               ,B.ALBUM_TITLE  ALBUM_TITLE
+               ,B.OPEN_DATE    OPEN_DATE
+        FROM ARTIST A,ALBUM B
+        WHERE A.MST_ID = B.MST_ID
+        AND A.MST_ID =#{mst_id,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="albumSongResultMap" type="co.kr.mono.studydb.model.music.Album" >
+        <id column="album_Id" property="albumId" jdbcType="VARCHAR"/>
+        <result column="album_seq" property="albumSeq" jdbcType="INTEGER"/>
+        <result column="album_title" property="albumTitle" jdbcType="VARCHAR"/>
+        <result column="open_date" property="openDate" jdbcType="VARCHAR"/>
+        <collection column="album_Id" property="songs" javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Song">
+            <id column="album_id" property="albumId" jdbcType="VARCHAR"/>
+            <id column="song_name" property="songName" jdbcType="VARCHAR"/>
+            <result column="play_time" property="playTime" jdbcType="BIGINT"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAlbumByPrimaryKey1" resultMap="albumSongResultMap" parameterType="java.lang.String">
+        SELECT A.ALBUM_ID     ALBUM_ID
+               ,A.MST_ID      MST_ID
+               ,A.ALBUM_SEQ   ALBUM_SEQ
+               ,A.OPEN_DATE   OPEN_DATE
+               ,B.SONG_NAME   SONG_NAME
+               ,B.PLAY_TIME   PLAY_TIME
+        FROM ALBUM A,SONG B
+        WHERE A.ALBUM_ID = B.ALBUM_ID
+        AND   A.ALBUM_ID =#{album_id,jdbcType=VARCHAR}
+    </select>
+
+
+    <resultMap id="artistAlbumSongMap" type="co.kr.mono.studydb.model.music.Album" >
+        <id column="album_Id" property="albumId" jdbcType="VARCHAR"/>
+        <result column="album_seq" property="albumSeq" jdbcType="INTEGER"/>
+        <result column="album_title" property="albumTitle" jdbcType="VARCHAR"/>
+        <result column="open_date" property="openDate" jdbcType="VARCHAR"/>
+        <association column="mst_id" property="artist" javaType="co.kr.mono.studydb.model.music.Artist" >
+            <id column="mst_id" property="mstId" jdbcType="VARCHAR"/>
+            <result column="mst_name" property="mstName" jdbcType="VARCHAR"/>
+            <result column="debut_date" property="debutDate" jdbcType="VARCHAR"/>
+        </association>
+        <collection column="album_Id" property="songs" javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.music.Song">
+            <id column="album_id" property="albumId" jdbcType="VARCHAR"/>
+            <id column="song_name" property="songName" jdbcType="VARCHAR"/>
+            <result column="play_time" property="playTime" jdbcType="FLOAT"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAlbumByPrimaryKey2" resultMap="artistAlbumSongMap" parameterType="java.lang.String">
+        SELECT A.MST_ID        MST_ID
+               ,A.MST_NAME     MST_NAME
+               ,A.DEBUT_DATE   DEBUT_DATE
+               ,B.ALBUM_ID     ALBUM_ID
+               ,B.ALBUM_SEQ    ALBUM_SEQ
+               ,B.ALBUM_TITLE  ALBUM_TITLE
+               ,B.OPEN_DATE    OPEN_DATE
+               ,C.SONG_NAME    SONG_NAME
+               ,C.PLAY_TIME    PLAY_TIME
+        FROM ARTIST A,ALBUM B,SONG C
+        WHERE A.MST_ID = B.MST_ID
+        AND B.ALBUM_ID = C.ALBUM_ID
+        AND B.ALBUM_ID = #{alubm_id,jdbcType=VARCHAR}
+    </select>
+</mapper>

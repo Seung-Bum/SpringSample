@@ -76,7 +76,6 @@
             ,ALBUM_TITLE
             ,OPEN_DATE
         FROM ALBUM
-<!--        WHERE MST_ID =#{album_id,jdbcType=VARCHAR} ??? 왜 있는지 모르겠음 오타 같음 -->
         WHERE ALBUM_ID =#{album_id,jdbcType=VARCHAR}
     </select>
 

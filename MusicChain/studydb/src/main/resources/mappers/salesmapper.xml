@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.mono.studydb.dao.AreaSalesDao">
+    <select id="findAreaSales" parameterType="String" resultType="AreaSalesDTO">
+        SELECT AREA_CD AREACD
+            ,REGION_AREA REGIONAREA
+            ,PROD_ID PRODID
+            ,SUM(SALE_CNT) SALECNT
+        FROM SALE_TBL
+        <!-- WHERE AREA_CD = ${areaCd} -->
+        WHERE AREA_CD = #{areaCd}
+            AND ROWNUM =1
+            GROUP BY AREA_CD
+            ,REGION_AREA
+            ,PROD_ID
+    </select>
+
+    <select id="findAreaSalesMap" parameterType="String" resultType="map">
+        SELECT AREA_CD AREACD
+              ,REGION_AREA REGIONAREA
+              ,PROD_ID PRODID
+              ,SUM(SALE_CNT) SALECNT
+        FROM SALE_TBL
+        WHERE AREA_CD = #{areaCd}
+          AND ROWNUM =1
+        GROUP BY AREA_CD
+            ,REGION_AREA
+            ,PROD_ID
+    </select>
+
+    <select id="findMsaleByMultiParm" parameterType="map" resultType="map">
+        SELECT PRODID
+              ,PRODNM
+              ,SALECNT
+        FROM MSALES
+        WHERE PRODID like #{prodId}||'%'
+         AND  PRODNM like #{prodNm}||'%'
+         AND  ROWNUM =1
+    </select>
+
+    <select id="findMsaleByMultiReturn" parameterType="map" resultType="map">
+    SELECT PRODID
+          ,PRODNM
+          ,SALECNT
+     FROM MSALES
+     WHERE PRODID like #{prodId}||'%'
+     AND  PRODNM like #{prodNm}||'%'
+    </select>
+
+</mapper>
