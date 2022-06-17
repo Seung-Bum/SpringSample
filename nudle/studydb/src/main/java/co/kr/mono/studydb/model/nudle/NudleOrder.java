@@ -22,6 +22,4 @@ public class NudleOrder {
 
     private int totalPrice;
 
-    private List<OrderProduct> orderProduct;
-
 }

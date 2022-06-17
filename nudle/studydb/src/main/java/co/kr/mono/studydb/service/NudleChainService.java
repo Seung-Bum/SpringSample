@@ -21,8 +21,8 @@ public class NudleChainService {
         return nudleOrderList;
     }
 
-    public List<OrderProduct> searchOrderProduct() {
-        List<OrderProduct> OrderProductList = nudleChainDao.selectOrderByPrimaryKey1();
+    public List<OrderProduct> searchOrderProduct(int order_id) {
+        List<OrderProduct> OrderProductList = nudleChainDao.selectOrderByPrimaryKey1(order_id);
         System.out.println(OrderProductList);
         return OrderProductList;
     }

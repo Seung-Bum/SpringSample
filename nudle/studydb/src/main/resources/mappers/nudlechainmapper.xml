@@ -10,10 +10,10 @@
         <result column="order_date" property="orderDate" jdbcType="VARCHAR" />
         <result column="total_price" property="totalPrice" jdbcType="INTEGER" />
 
-        <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
+        <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김
         <collection column="order_id" property="orderProduct"
                     javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.nudle.OrderProduct"
-                    select="selectOrderByPrimaryKey1" />
+                    select="selectOrderByPrimaryKey1" /> -->
     </resultMap>
 
 
@@ -25,6 +25,10 @@
         <!-- 실행시 Map의 collection을 적절히 주석으로 막고 실행해야함 cycle생김 -->
 
         <association column="product_id" property="nudle" select="selectOrderByPrimaryKey2" />
+        <association column="order_id" property="nudleOrder" select="selectOrderByPrimaryKey" />
+        <!-- <collection column="order_id" property="nudleOrder"
+                     javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.nudle.NudleOrder"
+                     select="selectOrderByPrimaryKey" /> -->
     </resultMap>
 
 
@@ -61,13 +65,14 @@
     </select>
 
     <!-- Nudle -->
-    <select id="selectOrderByPrimaryKey2" resultMap="NudleResultMap">
+    <select id="selectOrderByPrimaryKey2" resultMap="NudleResultMap" parameterType="java.lang.Integer">
         SELECT
              PRODUCT_ID
             ,PRODUCT_CATEGORY
             ,PRODUCT_NAME
             ,PRODUCT_PRICE
         FROM NUDLE
+        WHERE PRODUCT_ID = #{product_id,jdbcType=VARCHAR}
     </select>
 
 

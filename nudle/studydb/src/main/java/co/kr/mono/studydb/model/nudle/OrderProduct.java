@@ -22,4 +22,6 @@ public class OrderProduct {
     private String location;
 
     private Nudle nudle;
+
+    private NudleOrder nudleOrder;
 }

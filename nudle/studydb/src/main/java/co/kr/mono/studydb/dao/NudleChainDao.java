@@ -14,7 +14,7 @@ public interface NudleChainDao {
     public NudleOrder selectOrderByPrimaryKey(int order_id) ;
 
     // 상세 + 알파
-    public List<OrderProduct> selectOrderByPrimaryKey1() ;
+    public List<OrderProduct> selectOrderByPrimaryKey1(int order_id) ;
 
     // 제품 + 알파
     public Nudle selectOrderByPrimaryKey2() ;

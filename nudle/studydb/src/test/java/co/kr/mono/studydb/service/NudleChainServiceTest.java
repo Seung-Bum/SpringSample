@@ -40,8 +40,8 @@ class NudleChainServiceTest {
     @Test
     @DisplayName("상세 현황 + 알파")
     public void nudleOrderList1() throws JsonProcessingException {
-        List<OrderProduct> OrderProductList = nudleChainService.searchOrderProduct();
-        log.info("Json 변환 : {} ",mapper.writeValueAsString(OrderProductList));
+        List<OrderProduct> orderProductList = nudleChainService.searchOrderProduct(1);
+        log.info("Json 변환 : {} ",mapper.writeValueAsString(orderProductList));
     }
 
     @Test
