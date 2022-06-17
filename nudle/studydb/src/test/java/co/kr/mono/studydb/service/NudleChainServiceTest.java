@@ -37,6 +37,7 @@ class NudleChainServiceTest {
         log.info("Json 변환 : {} ",mapper.writeValueAsString(nudleOrderList));
     }
 
+    // 이걸로 테스트 하면됨
     @Test
     @DisplayName("상세 현황 + 알파")
     public void nudleOrderList1() throws JsonProcessingException {
