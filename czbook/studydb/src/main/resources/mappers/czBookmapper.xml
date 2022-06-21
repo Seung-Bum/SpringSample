@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.kr.mono.studydb.dao.CzBookDao">
 
+    <!-- id값을 어떤걸 지우고 하느냐에 따라 테이블의 포함관계가 달라짐, json형태가 달라짐 -->
     <resultMap id="memberResultMap" type="co.kr.mono.studydb.model.book.CzMember">
         <id column="member_id" property="memberId" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />
@@ -11,21 +12,21 @@
 
         <!-- 회원 : 1, 대출정보 : M -->
         <collection column="member_id" property="czBookLoan" javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.book.CzBookLoan" >
-            <id column="member_id" property="memberId" jdbcType="VARCHAR"/>
-            <id column="loan_id" property="loanId" jdbcType="VARCHAR"/>
-            <id column="book_id" property="bookId" jdbcType="VARCHAR"/>
+<!--            <id column="member_id" property="memberId" jdbcType="VARCHAR"/>-->
+            <result column="loan_id" property="loanId" jdbcType="VARCHAR"/>
+            <result column="book_id" property="bookId" jdbcType="VARCHAR"/>
             <result column="status" property="status" jdbcType="VARCHAR"/>
-        </collection>
 
-        <!-- 회원 : 1, 도서정보 : M -->
-        <collection column="book_id" property="czBooks" javaType="java.util.ArrayList" ofType="co.kr.mono.studydb.model.book.CzBook" >
-            <id column="book_id" property="bookId" jdbcType="VARCHAR"/>
-            <result column="book_name" property="bookName" jdbcType="VARCHAR"/>
-            <result column="writer" property="writer" jdbcType="VARCHAR"/>
-            <result column="publisher" property="publisher" jdbcType="VARCHAR"/>
-            <result column="publisher_YMD" property="publisherYMD" jdbcType="VARCHAR"/>
+            <association column="book_id" property="czBook" javaType="co.kr.mono.studydb.model.book.CzBook" >
+                <id column="book_id" property="bookId" jdbcType="VARCHAR"/>
+                <result column="book_name" property="bookName" jdbcType="VARCHAR"/>
+                <result column="writer" property="writer" jdbcType="VARCHAR"/>
+                <result column="publisher" property="publisher" jdbcType="VARCHAR"/>
+                <result column="publisher_YMD" property="publisherYMD" jdbcType="VARCHAR"/>
+            </association>
         </collection>
     </resultMap>
+
 
     <!-- member_id로 member를 조회 (id는 DAO이름과 같다.)-->
     <select id="selectCzMemberByPrimaryKey" resultMap="memberResultMap" parameterType="java.lang.String">
@@ -49,9 +50,8 @@
         AND B.MEMBER_ID = #{member_id,jdbcType=VARCHAR}
     </select>
 
-    <!-- member_id로 도서대출 회원 + 도서정보 검색 -->
-    <select id="selectCzMemberByPrimaryKey2" resultMap="memberResultMap" parameterType="java.lang.String">
-
+    <!-- @@ 도서대출 회원 + 도서정보 검색 @@ 멤버를 원래 리스트로 해야함 -->
+    <select id="selectCzMemberByPrimaryKey2" resultMap="memberResultMap">
         SELECT
              A.MEMBER_ID  MEMBER_ID
             ,A.NAME       NAME
@@ -59,40 +59,15 @@
             ,B.LOAN_ID    LOAN_ID
             ,B.MEMBER_ID  MEMBER_ID
             ,B.STATUS     STATUS
+            ,B.BOOK_ID    BOOK_ID
+            ,C.BOOK_ID    BOOK_ID
             ,C.BOOK_NAME  BOOK_NAME
             ,C.WRITER     WRITER
             ,C.PUBLISHER  PUBLISHER
             ,C.PUBLISHER_YMD  PUBLISHER_YMD
         FROM CZBOOKLOAN B, CZBOOK C, CZMEMBER A
-        WHERE B.BOOK_ID = C.BOOK_ID
-        AND A.MEMBER_ID = B.MEMBER_ID
-        AND A.MEMBER_ID = 101
-
-        <!--
-        SELECT A.MEMBER_ID  MEMBER_ID
-            ,A.NAME       NAME
-            ,A.ADDR       ADDR
-            ,B.LOAN_ID    LOAN_ID
-            ,B.MEMBER_ID  MEMBER_ID
-            ,B.STATUS     STATUS
-            ,B.BOOK_NAME  BOOK_NAME
-            ,B.WRITER     WRITER
-            ,B.PUBLISHER  PUBLISHER
-            ,B.PUBLISHER_YMD  PUBLISHER_YMD
-        FROM(
-            SELECT   B.LOAN_ID    LOAN_ID
-                ,B.MEMBER_ID  MEMBER_ID
-                ,B.STATUS     STATUS
-                ,C.BOOK_NAME  BOOK_NAME
-                ,C.WRITER     WRITER
-                ,C.PUBLISHER  PUBLISHER
-                ,C.PUBLISHER_YMD  PUBLISHER_YMD
-            FROM CZBOOKLOAN B, CZBOOK C
-            WHERE B.BOOK_ID = C.BOOK_ID
-        ) B, CZMEMBER A
         WHERE A.MEMBER_ID = B.MEMBER_ID
-        AND A.MEMBER_ID = #{member_id,jdbcType=VARCHAR}
-        -->
+        AND B.BOOK_ID = C.BOOK_ID
     </select>
 
 
@@ -155,3 +130,38 @@
 
 
 </mapper>
+
+
+        <!--
+                SELECT
+                     A.MEMBER_ID  MEMBER_ID
+                    ,A.NAME       NAME
+                    ,A.ADDR       ADDR
+                    ,B.LOAN_ID    LOAN_ID
+                    ,B.MEMBER_ID  MEMBER_ID
+                    ,B.STATUS     STATUS
+                    ,B.BOOK_ID    BOOK_ID
+                    ,C.BOOK_ID    BOOK_ID
+                    ,C.BOOK_NAME  BOOK_NAME
+                    ,C.WRITER     WRITER
+                    ,C.PUBLISHER  PUBLISHER
+                    ,C.PUBLISHER_YMD  PUBLISHER_YMD
+                FROM CZBOOKLOAN B, CZBOOK C, CZMEMBER A
+                WHERE A.MEMBER_ID = B.MEMBER_ID
+                AND B.BOOK_ID = C.BOOK_ID
+
+
+
+                SELECT
+             A.NAME     NAME
+            ,A.ADDR     ADDR
+            ,B.BOOK_ID  BOOK_ID
+            ,B.STATUS   STATUS
+            ,C.BOOK_NAME BOOK_NAME
+            ,C.WRITER   WRITER
+            ,C.PUBLISHER PUBLISHER
+            ,C.PUBLISHER_YMD PUBLISHER_YMD
+        FROM CZMEMBER A, CZBOOKLOAN B, CZBOOK C
+        WHERE A.MEMBER_ID = B.MEMBER_ID
+        AND B.BOOK_ID = C.BOOK_ID
+                -->

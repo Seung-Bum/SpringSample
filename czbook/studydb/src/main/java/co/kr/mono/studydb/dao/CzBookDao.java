@@ -17,7 +17,7 @@ public interface CzBookDao {
     public CzMember selectCzMemberByPrimaryKey1(String member_id);
 
     // 회원 대출정보 + 도서정보
-    public CzMember selectCzMemberByPrimaryKey2(String member_id);
+    public CzMember selectCzMemberByPrimaryKey2();
     
     // 대출 히스토리 + 모든정보
     public List<CzBookLoanHist> selectCzBookLoanHistByPrimaryKey(String loan_id);

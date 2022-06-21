@@ -40,8 +40,8 @@ public class CzbookJoinService {
     }
 
     // 회원기준 : 도서정보 + 대출정보 + 회원
-    public CzMember searchMemberWithBookLoanAndBook(String member_id){
-        CzMember member = czBookDao.selectCzMemberByPrimaryKey2(member_id);
+    public CzMember searchMemberWithBookLoanAndBook(){
+        CzMember member = czBookDao.selectCzMemberByPrimaryKey2();
         return member ;
     }
 

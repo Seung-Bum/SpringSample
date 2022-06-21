@@ -47,8 +47,8 @@ class CzbookJoinServiceTest {
     @Test
     @DisplayName("Member + 대출정보 + 도서정보")
     public void searchMemberWithBookLoanAndBook() throws JsonProcessingException {
-        CzMember member = czbookJoinService.searchMemberWithBookLoanAndBook("101");
-        log.info("Json 변환 : {} ",mapper.writeValueAsString(member));
+        CzMember member = czbookJoinService.searchMemberWithBookLoanAndBook();
+        log.info("Json 변환 : {} ", mapper.writeValueAsString(member));
     }
 
     @Test

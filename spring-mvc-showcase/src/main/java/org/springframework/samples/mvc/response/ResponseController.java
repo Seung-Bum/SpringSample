@@ -25,9 +25,10 @@ public class ResponseController {
 
 	// produces : 서버에서 브라우저로 데이터를 보낼 때 charset을 설정
 	//
-	@GetMapping(value="/charset/produce", produces="text/plain;charset=UTF-8")
+	@GetMapping(value="/charset/produce", produces="text/plain;charset=ISO-8859-1")
 	public String responseProducesConditionCharset() {
 		return "\u3053\u3093\u306b\u3061\u306f\u4e16\u754c\uff01 (\"Hello world!\" in Japanese)";
+//		return "ABCD";
 	}
 
 

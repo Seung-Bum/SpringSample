@@ -27,9 +27,9 @@
 <mapper namespace="co.kr.mono.studydb.dao.AreaSalesDao">
     <select id="findAreaSales" parameterType="String" resultType="AreaSalesDTO">
         SELECT AREA_CD AREACD
-        ,REGION_AREA REGIONAREA
-        ,PROD_ID PRODID
-        ,SUM(SALE_CNT) SALECNT
+            ,REGION_AREA REGIONAREA
+            ,PROD_ID PRODID
+            ,SUM(SALE_CNT) SALECNT
         FROM SALE_TBL
         WHERE AREA_CD = #{areaCd}
         AND ROWNUM = 1

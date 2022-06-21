@@ -1,14 +1,13 @@
 package co.kr.mono.studydb.model.book;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jdk.jfr.Threshold;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor // 파라미터가 없는 기본생성자를 생성
 @AllArgsConstructor // 모든 필드값을 파라미터로 받는 생성자를 만들어줌
+@ToString
 public class CzBook {
 
     private String bookId ;
@@ -17,14 +16,4 @@ public class CzBook {
     private String publisher ;
     private String publisherYMD ;
 
-    @Override
-    public String toString() {
-        return "CzBook{" +
-                "bookId='" + bookId + '\'' +
-                ", bookName='" + bookName + '\'' +
-                ", Writer='" + writer + '\'' +
-                ", Publisher='" + publisher + '\'' +
-                ", PublisherYMD='" + publisherYMD + '\'' +
-                '}';
-    }
 }
