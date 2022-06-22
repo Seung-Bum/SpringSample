@@ -37,12 +37,13 @@ public class ResponseController {
 	@GetMapping("/entity/status")
 	public ResponseEntity<String> responseEntityStatusCode() {
 		return new ResponseEntity<String>("The String ResponseBody with custom status code (403 Forbidden)",
-				HttpStatus.FORBIDDEN);
+				HttpStatus.FORBIDDEN); // 403에러, 서버에 요청이 전달되었지만, 권한 때문에 거절되었다는 것을 의미합니다.
 	}
+
 	@GetMapping("/entity/status1")
 	public ResponseEntity<String> responseEntityStatusCode1() {
 		return new ResponseEntity<String>("The server has processed the request.",
-				HttpStatus.OK);
+				HttpStatus.OK); // HttpStatus를 200으로 변경
 	}
 
 

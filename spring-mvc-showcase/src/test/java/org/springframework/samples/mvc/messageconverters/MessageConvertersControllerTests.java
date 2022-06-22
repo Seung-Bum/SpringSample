@@ -84,9 +84,9 @@ public class MessageConvertersControllerTests extends AbstractContextControllerT
 	}
 	@Test
 	public void writeForm() throws Exception {
-		this.mockMvc.perform(get(URI, "form"))
+		this.mockMvc.perform(get(URI, "form").contentType(MediaType.APPLICATION_FORM_URLENCODED))
+//				.andExpect(content().contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andDo(print())
-				.andExpect(content().contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(content().string("foo=bar&fruit=apple"));
 	}
 
@@ -104,7 +104,8 @@ public class MessageConvertersControllerTests extends AbstractContextControllerT
 		this.mockMvc.perform(
 				post(URI, "xml")
 					.contentType(MediaType.APPLICATION_XML)
-					.content(XML.getBytes())) // XML 형태로 보냄
+					.content(XML.getBytes())) // XML 형태로 보내서 맵핑
+					//.characterEncoding("utf-8")
 				.andDo(print())
 				.andExpect(content().string("Read from XML: JavaBean {foo=[bar], fruit=[apple]}"));
 	}
@@ -188,6 +189,7 @@ public class MessageConvertersControllerTests extends AbstractContextControllerT
 				post(URI, "rss")
 					.contentType(MediaType.valueOf("application/rss+xml"))
 					.content(rss.getBytes()))
+				.andDo(print())
 				.andExpect(content().string("Read My RSS feed"));
 	}
 	@Test
@@ -197,7 +199,7 @@ public class MessageConvertersControllerTests extends AbstractContextControllerT
 				"<rss version=\"2.0\"><channel><title>My RSS feed</title><link>http://localhost:8080/mvc-showcase/rss</link>" +
 				"<description>Description</description></channel></rss>";
 
-		this.mockMvc.perform(get(URI, "rss").accept(MediaType.valueOf("application/rss+xml")))
+		this.mockMvc.perform(get(URI, "rss").accept(MediaType.valueOf("application/rss+xml"))).andDo(print())
 				.andExpect(content().xml(rss));
 	}
 
